@@ -1,0 +1,1 @@
+const kLanguageCollectionTitle = "language-collection";
