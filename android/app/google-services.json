@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "830261894266",
+    "project_id": "ngerti-83bcd",
+    "storage_bucket": "ngerti-83bcd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830261894266:android:42dd03ca279078a89eefc3",
+        "android_client_info": {
+          "package_name": "com.example.ngerti"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "830261894266-500gvql48eee6plbdf71vmn08fvjv6ha.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCYPsRXEDSEOvtU6OlvswA0WY1Pp--O3vU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "830261894266-500gvql48eee6plbdf71vmn08fvjv6ha.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
