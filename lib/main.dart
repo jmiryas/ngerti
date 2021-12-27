@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:firebase_core/firebase_core.dart";
 
+import '../constants/constants.dart';
 import '../screens/home_screen.dart';
 
 void main() async {
@@ -14,13 +15,22 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(backgroundColor: colorTheme),
+        floatingActionButtonTheme:
+            const FloatingActionButtonThemeData(backgroundColor: colorTheme),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(colorTheme),
+          ),
+        ),
+      ),
       title: "ngerti",
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }

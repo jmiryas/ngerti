@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Home"),
+        title: const Text("Koleksi Bahasa"),
       ),
       drawer: const DrawerNavigationWidget(),
       body: StreamBuilder(

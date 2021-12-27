@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants/constants.dart';
 import '../widgets/info_widget.dart';
 
 class DrawerNavigationWidget extends StatelessWidget {
@@ -10,29 +11,33 @@ class DrawerNavigationWidget extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.blue.shade400,
-                  borderRadius: BorderRadius.circular(2.0),
+          const DrawerHeader(
+              decoration: BoxDecoration(
+                color: colorTheme,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(wallpaperMenu),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
-                child: const Text(
-                  "ngerti",
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    letterSpacing: 1.2,
-                    color: Colors.white,
-                  ),
+              ),
+              child: SizedBox()),
+          Container(
+            color: colorTheme,
+            height: 50.0,
+            child: const Center(
+              child: Text(
+                "ngerti",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 26.0,
+                  letterSpacing: 5.0,
+                  fontWeight: FontWeight.w300,
                 ),
               ),
             ),
+          ),
+          const SizedBox(
+            height: 5.0,
           ),
           ListTile(
             title: Row(
