@@ -32,13 +32,43 @@ class HomeScreen extends StatelessWidget {
                 return ListView(
                   padding: const EdgeInsets.all(20.0),
                   children: snapshot.data!.docs.map((collection) {
-                    return Card(
-                      child: ListTile(
-                        title: Text(collection["label"]),
-                        subtitle: Text("${collection['words'].length}"),
-                        trailing: Text(collection["flag"]),
-                      ),
-                    );
+                    return Dismissible(
+                        key: Key(collection["id"]),
+                        background: Container(
+                          color: Colors.red.shade300,
+                          child: const Center(
+                            child: Text(
+                              "Hapus?",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        onDismissed: (direction) async {
+                          // * Hapus koleksi bahasa.
+
+                          FirebaseFirestore firestore =
+                              FirebaseFirestore.instance;
+                          CollectionReference languageCollection =
+                              firestore.collection(kLanguageCollectionTitle);
+
+                          await languageCollection.doc(collection.id).delete();
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Koleksi bahasa berhasil dihapus!"),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          child: ListTile(
+                            title: Text(collection["label"]),
+                            subtitle: Text("${collection['words'].length}"),
+                            trailing: Text(collection["flag"]),
+                          ),
+                        ));
                   }).toList(),
                 );
               } else {
