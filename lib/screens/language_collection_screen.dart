@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../constants/constants.dart';
 import '../widgets/info_widget.dart';
-import '../widgets/drawer_navigation_widget.dart';
 import '../models/language_collection_model.dart';
 
 class LanguageCollectionScreen extends StatelessWidget {
@@ -21,7 +20,6 @@ class LanguageCollectionScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text("Koleksi Bahasa"),
       ),
-      drawer: const DrawerNavigationWidget(),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection(kLanguageCollectionTitle)

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+import 'package:ngerti/screens/about_us_screen.dart';
+import 'package:ngerti/screens/quiz_screen.dart';
 
 import '../constants/constants.dart';
 import '../screens/language_collection_screen.dart';
@@ -36,14 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
           onPageChanged: (index) {
             setState(() => _currentIndex = index);
           },
-          children: <Widget>[
-            const LanguageCollectionScreen(),
-            Container(
-              color: Colors.blueGrey,
-            ),
-            Container(
-              color: Colors.amber,
-            ),
+          children: const [
+            LanguageCollectionScreen(),
+            QuizScreen(),
+            AboutUsScreen(),
           ],
         ),
       ),
@@ -55,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           items: [
             BottomNavyBarItem(
               icon: const Icon(Icons.home),
-              title: const Text("Home"),
+              title: const Text("Beranda"),
               activeColor: colorTheme,
               textAlign: TextAlign.center,
             ),
@@ -67,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             BottomNavyBarItem(
               icon: const Icon(Icons.info),
-              title: const Text("About Us"),
+              title: const Text("Tentang Kami"),
               activeColor: colorTheme,
               textAlign: TextAlign.center,
             ),
