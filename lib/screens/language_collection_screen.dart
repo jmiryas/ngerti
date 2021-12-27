@@ -1,10 +1,12 @@
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../constants/constants.dart';
 import '../widgets/info_widget.dart';
 import '../models/language_collection_model.dart';
+import '../providers/language_collection_provider.dart';
 
 class LanguageCollectionScreen extends StatelessWidget {
   const LanguageCollectionScreen({Key? key}) : super(key: key);
@@ -23,6 +25,7 @@ class LanguageCollectionScreen extends StatelessWidget {
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection(kLanguageCollectionTitle)
+              .orderBy("dateTime")
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
@@ -31,42 +34,71 @@ class LanguageCollectionScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(20.0),
                   children: snapshot.data!.docs.map((collection) {
                     return Dismissible(
-                        key: Key(collection["id"]),
-                        background: Container(
-                          color: Colors.red.shade300,
-                          child: const Center(
-                            child: Text(
-                              "Hapus?",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      key: Key(collection["id"]),
+                      background: Container(
+                        color: Colors.red.shade300,
+                        child: const Center(
+                          child: Text(
+                            "Hapus?",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
-                        onDismissed: (direction) async {
-                          // * Hapus koleksi bahasa.
+                      ),
+                      onDismissed: (direction) async {
+                        // * Hapus koleksi bahasa.
 
-                          FirebaseFirestore firestore =
-                              FirebaseFirestore.instance;
-                          CollectionReference languageCollection =
-                              firestore.collection(kLanguageCollectionTitle);
+                        FirebaseFirestore firestore =
+                            FirebaseFirestore.instance;
+                        CollectionReference languageCollection =
+                            firestore.collection(kLanguageCollectionTitle);
 
-                          await languageCollection.doc(collection.id).delete();
+                        await languageCollection.doc(collection.id).delete();
 
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Koleksi bahasa berhasil dihapus!"),
-                            ),
-                          );
-                        },
-                        child: Card(
+                        Provider.of<LangaugeCollectionProvider>(context,
+                                listen: false)
+                            .clearSelectedLanguageCollection(
+                          collection["label"],
+                          collection["flag"],
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Koleksi bahasa berhasil dihapus!"),
+                          ),
+                        );
+                      },
+                      child: Consumer<LangaugeCollectionProvider>(
+                          builder: (context, languageCollection, child) {
+                        return Card(
                           child: ListTile(
+                            leading: languageCollection.selectedFlag ==
+                                    collection["flag"]
+                                ? const SizedBox(
+                                    width: 15.0,
+                                    height: double.infinity,
+                                    child: Center(
+                                      child: CircleAvatar(
+                                        radius: 8.0,
+                                        backgroundColor: colorTheme,
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
                             title: Text(collection["label"]),
                             subtitle: Text("${collection['words'].length}"),
                             trailing: Text(collection["flag"]),
+                            onTap: () {
+                              languageCollection
+                                  .changeSelectedLanguageCollection(
+                                      collection["label"], collection["flag"]);
+                            },
                           ),
-                        ));
+                        );
+                      }),
+                    );
                   }).toList(),
                 );
               } else {
@@ -176,6 +208,7 @@ class LanguageCollectionScreen extends StatelessWidget {
                           label: _languageCollectionController.text,
                           words: [],
                           flag: _selectedFlag,
+                          dateTime: DateTime.now(),
                         );
 
                         FirebaseFirestore firestore =
@@ -191,6 +224,13 @@ class LanguageCollectionScreen extends StatelessWidget {
                               content:
                                   Text("Koleksi bahasa berhasil ditambah!"),
                             ),
+                          );
+
+                          Provider.of<LangaugeCollectionProvider>(context,
+                                  listen: false)
+                              .changeSelectedLanguageCollection(
+                            langauageCollectionModel.label,
+                            langauageCollectionModel.flag,
                           );
 
                           Navigator.pop(context);

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:ngerti/screens/about_us_screen.dart';
-import 'package:ngerti/screens/quiz_screen.dart';
 
+import '../screens/quiz_screen.dart';
 import '../constants/constants.dart';
+import '../screens/about_us_screen.dart';
 import '../screens/language_collection_screen.dart';
 
 class HomeScreen extends StatefulWidget {
