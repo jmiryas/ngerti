@@ -4,11 +4,13 @@ class LangauageCollectionModel {
   final String id;
   final String label;
   final List<WordModel> words;
+  final String flag;
 
   LangauageCollectionModel({
     required this.id,
     required this.label,
     required this.words,
+    required this.flag,
   });
 
   Map<String, dynamic> toMap() {
@@ -16,6 +18,7 @@ class LangauageCollectionModel {
       "id": id,
       "label": label,
       "words": words,
+      "flag": flag,
     };
   }
 
@@ -24,6 +27,7 @@ class LangauageCollectionModel {
       id: json["id"],
       label: json["label"],
       words: json["words"],
+      flag: json["flag"],
     );
   }
 }
