@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ngerti/providers/language_collection_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/language_collection_provider.dart';
 
 class QuizScreen extends StatelessWidget {
   const QuizScreen({Key? key}) : super(key: key);

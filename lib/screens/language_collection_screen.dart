@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../screens/word_screen.dart';
 import '../constants/constants.dart';
 import '../widgets/info_widget.dart';
 import '../models/language_collection_model.dart';
@@ -70,34 +71,30 @@ class LanguageCollectionScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Consumer<LangaugeCollectionProvider>(
-                          builder: (context, languageCollection, child) {
-                        return Card(
-                          child: ListTile(
-                            leading: languageCollection.selectedFlag ==
-                                    collection["flag"]
-                                ? const SizedBox(
-                                    width: 15.0,
-                                    height: double.infinity,
-                                    child: Center(
-                                      child: CircleAvatar(
-                                        radius: 8.0,
-                                        backgroundColor: colorTheme,
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            title: Text(collection["label"]),
-                            subtitle: Text("${collection['words'].length}"),
-                            trailing: Text(collection["flag"]),
-                            onTap: () {
-                              languageCollection
-                                  .changeSelectedLanguageCollection(
-                                      collection["label"], collection["flag"]);
-                            },
+                      child: Card(
+                        child: ListTile(
+                          leading: const SizedBox(
+                            width: 15.0,
+                            height: double.infinity,
+                            child: Center(
+                              child: CircleAvatar(
+                                radius: 8.0,
+                                backgroundColor: colorTheme,
+                              ),
+                            ),
                           ),
-                        );
-                      }),
+                          title: Text(collection["label"]),
+                          subtitle: Text("${collection['words'].length}"),
+                          trailing: Text(collection["flag"]),
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return WordScreen(
+                                  languageCollectionId: collection.id);
+                            }));
+                          },
+                        ),
+                      ),
                     );
                   }).toList(),
                 );
