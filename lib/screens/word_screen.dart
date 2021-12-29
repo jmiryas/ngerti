@@ -1,6 +1,6 @@
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/word_model.dart';
@@ -18,8 +18,6 @@ class WordScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController _foreignWordController = TextEditingController();
     TextEditingController _englishWordController = TextEditingController();
-    TextEditingController _indonesianWordController = TextEditingController();
-    TextEditingController _pronounceLinkController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -43,23 +41,80 @@ class WordScreen extends StatelessWidget {
                       if (language["words"].length > 0) {
                         return Column(children: [
                           ...language["words"].map((word) {
-                            return Card(
-                              child: ListTile(
-                                title: Text(word["foreignWord"]),
-                                subtitle: Text(word["englishWord"]),
-                                trailing: word["voice"] != null
-                                    ? IconButton(
-                                        onPressed: () async {
-                                          AudioPlayer audioPlayer =
-                                              AudioPlayer();
-                                          int result = await audioPlayer
-                                              .play(word["voice"]);
-
-                                          print(result);
-                                        },
-                                        icon: const Icon(Icons.keyboard_voice))
-                                    : const SizedBox(),
+                            return Dismissible(
+                              key: Key(word["id"]),
+                              background: Container(
+                                color: Colors.red.shade300,
+                                child: const Center(
+                                  child: Text(
+                                    "Hapus?",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                               ),
+                              child: Card(
+                                child: ListTile(
+                                  title: Text(word["foreignWord"]),
+                                  subtitle: Text(word["englishWord"]),
+                                  trailing: word["voice"] != null &&
+                                          !word["voice"].isEmpty
+                                      ? IconButton(
+                                          onPressed: () async {
+                                            final player = AudioPlayer();
+                                            await player.setUrl(word["voice"]);
+
+                                            player.play();
+                                          },
+                                          icon:
+                                              const Icon(Icons.keyboard_voice))
+                                      : const SizedBox(),
+                                ),
+                              ),
+                              onDismissed: (direction) async {
+                                final currentLanguageCollection =
+                                    await FirebaseFirestore.instance
+                                        .collection(kLanguageCollectionTitle)
+                                        .where(FieldPath.documentId,
+                                            isEqualTo: languageCollectionId)
+                                        .get();
+
+                                List<dynamic> currentWords =
+                                    currentLanguageCollection.docs
+                                        .map((item) => item["words"])
+                                        .toList()[0];
+
+                                List<dynamic> updatedWords = [];
+
+                                for (var item in currentWords) {
+                                  if (item["id"] != word["id"]) {
+                                    updatedWords.add(item);
+                                  }
+                                }
+
+                                FirebaseFirestore firestore =
+                                    FirebaseFirestore.instance;
+                                CollectionReference languageCollection =
+                                    firestore
+                                        .collection(kLanguageCollectionTitle);
+
+                                await languageCollection
+                                    .doc(languageCollectionId)
+                                    .update({
+                                  "words": [
+                                    ...updatedWords,
+                                  ],
+                                }).whenComplete(() {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text("Kosa kata berhasil dihapus!"),
+                                    ),
+                                  );
+                                });
+                              },
                             );
                           }).toList()
                         ]);
@@ -133,36 +188,6 @@ class WordScreen extends StatelessWidget {
                               hintText: "Please",
                             ),
                           ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          TextField(
-                            controller: _indonesianWordController,
-                            textCapitalization: TextCapitalization.sentences,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              filled: true,
-                              isDense: true,
-                              fillColor: Colors.grey.shade100,
-                              labelText: "Kosa Kata Indonesia",
-                              hintText: "Silakan",
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 10.0,
-                          ),
-                          TextField(
-                            controller: _pronounceLinkController,
-                            textCapitalization: TextCapitalization.sentences,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              filled: true,
-                              isDense: true,
-                              fillColor: Colors.grey.shade100,
-                              labelText: "Pengucapan",
-                              hintText: "https://",
-                            ),
-                          ),
                         ],
                       ),
                     );
@@ -177,8 +202,7 @@ class WordScreen extends StatelessWidget {
                     TextButton(
                       onPressed: () async {
                         if (_foreignWordController.text.isEmpty ||
-                            _englishWordController.text.isEmpty ||
-                            _indonesianWordController.text.isEmpty) {
+                            _englishWordController.text.isEmpty) {
                           showDialog(
                             context: context,
                             builder: (context) {
@@ -188,6 +212,18 @@ class WordScreen extends StatelessWidget {
                             },
                           );
                         } else {
+                          final currentLanguageCollection =
+                              await FirebaseFirestore.instance
+                                  .collection(kLanguageCollectionTitle)
+                                  .where(FieldPath.documentId,
+                                      isEqualTo: languageCollectionId)
+                                  .get();
+
+                          List<dynamic> currentWords = currentLanguageCollection
+                              .docs
+                              .map((item) => item["words"])
+                              .toList()[0];
+
                           const uuid = Uuid();
 
                           FirebaseFirestore firestore =
@@ -199,12 +235,11 @@ class WordScreen extends StatelessWidget {
                               .doc(languageCollectionId)
                               .update({
                             "words": [
+                              ...currentWords,
                               WordModel(
                                 id: uuid.v4(),
                                 foreignWord: _foreignWordController.text,
                                 englishWord: _englishWordController.text,
-                                indonesianWord: _indonesianWordController.text,
-                                voice: _pronounceLinkController.text,
                                 dateTime: DateTime.now(),
                               ).toMap(),
                             ],
@@ -220,8 +255,6 @@ class WordScreen extends StatelessWidget {
 
                               _foreignWordController.clear();
                               _englishWordController.clear();
-                              _indonesianWordController.clear();
-                              _pronounceLinkController.clear();
                             },
                           );
                         }

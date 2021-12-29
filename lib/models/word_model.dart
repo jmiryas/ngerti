@@ -2,7 +2,6 @@ class WordModel {
   final String id;
   final String foreignWord;
   final String englishWord;
-  final String indonesianWord;
   final String? voice;
   final DateTime dateTime;
 
@@ -10,7 +9,6 @@ class WordModel {
     required this.id,
     required this.foreignWord,
     required this.englishWord,
-    required this.indonesianWord,
     this.voice,
     required this.dateTime,
   });
@@ -20,7 +18,6 @@ class WordModel {
       "id": id,
       "foreignWord": foreignWord,
       "englishWord": englishWord,
-      "indonesianWord": indonesianWord,
       "voice": voice,
       "dateTime": dateTime,
     };
@@ -31,7 +28,6 @@ class WordModel {
       id: json["id"],
       foreignWord: json["foreignWord"],
       englishWord: json["englishWord"],
-      indonesianWord: json["indonesianWord"],
       voice: json["voice"],
       dateTime: json["dateTime"],
     );

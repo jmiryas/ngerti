@@ -58,13 +58,6 @@ class LanguageCollectionScreen extends StatelessWidget {
 
                         await languageCollection.doc(collection.id).delete();
 
-                        Provider.of<LangaugeCollectionProvider>(context,
-                                listen: false)
-                            .clearSelectedLanguageCollection(
-                          collection["label"],
-                          collection["flag"],
-                        );
-
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text("Koleksi bahasa berhasil dihapus!"),
@@ -87,11 +80,15 @@ class LanguageCollectionScreen extends StatelessWidget {
                           subtitle: Text("${collection['words'].length}"),
                           trailing: Text(collection["flag"]),
                           onTap: () {
-                            Navigator.push(context,
-                                MaterialPageRoute(builder: (context) {
-                              return WordScreen(
-                                  languageCollectionId: collection.id);
-                            }));
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return WordScreen(
+                                      languageCollectionId: collection.id);
+                                },
+                              ),
+                            );
                           },
                         ),
                       ),
@@ -221,13 +218,6 @@ class LanguageCollectionScreen extends StatelessWidget {
                               content:
                                   Text("Koleksi bahasa berhasil ditambah!"),
                             ),
-                          );
-
-                          Provider.of<LangaugeCollectionProvider>(context,
-                                  listen: false)
-                              .changeSelectedLanguageCollection(
-                            langauageCollectionModel.label,
-                            langauageCollectionModel.flag,
                           );
 
                           Navigator.pop(context);
