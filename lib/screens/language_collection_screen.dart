@@ -1,13 +1,11 @@
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../screens/word_screen.dart';
 import '../constants/constants.dart';
 import '../widgets/info_widget.dart';
 import '../models/language_collection_model.dart';
-import '../providers/language_collection_provider.dart';
 
 class LanguageCollectionScreen extends StatelessWidget {
   const LanguageCollectionScreen({Key? key}) : super(key: key);
@@ -66,19 +64,21 @@ class LanguageCollectionScreen extends StatelessWidget {
                       },
                       child: Card(
                         child: ListTile(
-                          leading: const SizedBox(
-                            width: 15.0,
+                          leading: SizedBox(
+                            width: 30.0,
                             height: double.infinity,
                             child: Center(
-                              child: CircleAvatar(
-                                radius: 8.0,
-                                backgroundColor: colorTheme,
+                              child: Text(
+                                collection["flag"],
+                                style: const TextStyle(
+                                  fontSize: 25.0,
+                                ),
                               ),
                             ),
                           ),
                           title: Text(collection["label"]),
                           subtitle: Text("${collection['words'].length}"),
-                          trailing: Text(collection["flag"]),
+                          trailing: const Icon(Icons.arrow_forward_ios_rounded),
                           onTap: () {
                             Navigator.push(
                               context,
