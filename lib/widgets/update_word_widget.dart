@@ -75,8 +75,8 @@ class UpdateWordWidget extends StatelessWidget {
                           isLoading = !isLoading;
                         });
 
-                        final url = Uri.parse(
-                            "https://ngerti-pronounce-api.herokuapp.com/pronounce/${word['foreignWord']}");
+                        final url =
+                            Uri.parse("$kBabLaApi${word['foreignWord']}");
 
                         final response = await http.get(url).whenComplete(() {
                           setState(() {
