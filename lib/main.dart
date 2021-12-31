@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import "package:firebase_core/firebase_core.dart";
-import 'package:ngerti/providers/language_collection_provider.dart';
-import 'package:provider/provider.dart';
 
 import '../constants/constants.dart';
-import '../screens/home_screen.dart';
+import '../screens/language_collection_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +30,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       title: "ngerti",
-      home: const HomeScreen(),
+      home: const LanguageCollectionScreen(),
     );
   }
 }
