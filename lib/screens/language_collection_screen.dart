@@ -85,7 +85,9 @@ class LanguageCollectionScreen extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (context) {
                                   return WordScreen(
-                                      languageCollectionId: collection.id);
+                                    languageCollectionId: collection.id,
+                                    flag: collection["flag"],
+                                  );
                                 },
                               ),
                             );

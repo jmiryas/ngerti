@@ -10,10 +10,12 @@ import '../constants/constants.dart';
 class UpdateWordWidget extends StatelessWidget {
   final String languageCollectionId;
   final Map<String, dynamic> word;
+  final String flag;
   const UpdateWordWidget({
     Key? key,
     required this.languageCollectionId,
     required this.word,
+    required this.flag,
   }) : super(key: key);
 
   @override
@@ -76,7 +78,7 @@ class UpdateWordWidget extends StatelessWidget {
                         });
 
                         final url =
-                            Uri.parse("$kBabLaApi${word['foreignWord']}");
+                            Uri.parse("$kBabLaApi$flag/${word['foreignWord']}");
 
                         final response = await http.get(url).whenComplete(() {
                           setState(() {

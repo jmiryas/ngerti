@@ -8,9 +8,11 @@ import '../widgets/add_new_word_widget.dart';
 
 class WordScreen extends StatelessWidget {
   final String languageCollectionId;
+  final String flag;
   const WordScreen({
     Key? key,
     required this.languageCollectionId,
+    required this.flag,
   }) : super(key: key);
 
   @override
@@ -75,6 +77,7 @@ class WordScreen extends StatelessWidget {
                                           languageCollectionId:
                                               languageCollectionId,
                                           word: word,
+                                          flag: flag,
                                         );
                                       },
                                     );

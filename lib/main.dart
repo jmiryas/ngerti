@@ -7,7 +7,16 @@ import '../screens/language_collection_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: "AIzaSyBK7qXy_4doGyAmKfKwqcaykCXFbgpxj3w",
+      appId: "1:830261894266:web:a106209319cf886c9eefc3",
+      messagingSenderId: "830261894266",
+      projectId: "ngerti-83bcd",
+      authDomain: "ngerti-83bcd.firebaseapp.com",
+      storageBucket: "ngerti-83bcd.appspot.com",
+    ),
+  );
 
   runApp(const MyApp());
 }
